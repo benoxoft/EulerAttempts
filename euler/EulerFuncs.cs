@@ -65,11 +65,33 @@ namespace euler
 
 		public List<long> FindPrimeNumbers(long max) {
 			var primeNumbers = new List<long> ();
-			for (long i = max; i > 0; i--) {
+			primeNumbers.Add (1);
+			primeNumbers.Add (2);
+			for (long i = 3; i < max; i+=2) {
+				if (i % 1001 == 0) {
+					Console.WriteLine (i);
+				}
+				var skip = false;
+				var topfactor = Math.Sqrt (i);
+				foreach (var prime in primeNumbers) {
+					if (prime > topfactor) {
+						break;
+					}
+					if (prime != 1 && i % prime == 0) {
+						skip = true;
+						break;
+					}
+				}
+				if(skip) {
+					continue;
+				}
 				long factorCount = 0;
 				for (long j = 1; j <= i; j++) {
 					if (i % j == 0) {
 						factorCount++;
+					}
+					if (factorCount > 2) {
+						continue;
 					}
 				}
 				if (factorCount <= 2) {
@@ -80,7 +102,9 @@ namespace euler
 		}
 
 		public long FindAnswer3(long number) {
-			var numbers = FindPrimeNumbers (number / 2);
+			var numbers = FindPrimeNumbers ((long) Math.Sqrt(number));
+			numbers.Reverse ();
+			Console.WriteLine ("Looking for answers");
 			var values = Search3 (number, numbers, new List<long> ());
 			long biggest = 0;
 			foreach (var val in values) {
@@ -91,11 +115,20 @@ namespace euler
 			return biggest;
 		}
 
+		public long Search31(long total, List<long> primes, List<long> multipliers) {
+			foreach (var prime in primes) {
+				if (total % prime == 0) {
+					return prime;
+				}
+			}
+			throw new ApplicationException ("Could not find a value");
+		}
 		private List<long> Search3(long total, List<long> primes, List<long> multipliers) {
 			foreach(var prime in primes) {
 				if (prime == 1) {
 					continue;
 				}
+
 				if (MultiplyList (multipliers, prime) == total) {
 					multipliers.Add (prime);
 					return multipliers;

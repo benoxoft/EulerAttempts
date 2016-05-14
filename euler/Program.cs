@@ -8,9 +8,12 @@ namespace euler
 		{
 			Console.WriteLine ("Hello World!");
 			var e = new EulerFuncs ();
-			Console.WriteLine (e.FindPrimeNumbers(600851475143));
+			//Console.WriteLine (e.FindPrimeNumbers(775146));
 
-			//Console.WriteLine (e.FindAnswer3(600851475143));
+			var numbers = e.FindPrimeNumbers ((long) Math.Sqrt(600851475143));
+			numbers.Reverse ();
+			Console.WriteLine ("Looking for answers");
+			Console.WriteLine (e.Search31(600851475143, numbers, new System.Collections.Generic.List<long>()));
 		}
 
 	}
